@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'; 
 import { useState } from 'react';
-import { EditorState } from 'draft-js'
+import { EditorState, convertToRaw } from 'draft-js'
 const Editor = dynamic(
   () => import('react-draft-wysiwyg').then(mod => mod.Editor),
   { ssr: false }
@@ -9,11 +9,11 @@ const Editor = dynamic(
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 
-export function DraftTextEditor() {
+export function DraftTextEditor({handleEditorState}) {
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const onEditorStateChange = (editorState) => {
     setEditorState(editorState)
-    console.log(editorState)
+    handleEditorState(convertToRaw(editorState.getCurrentContent()))
   }
   return (
     <div>
